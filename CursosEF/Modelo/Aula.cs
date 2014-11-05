@@ -12,16 +12,16 @@ namespace CursosEF.Modelo
     using System;
     using System.Collections.Generic;
     
-    public partial class Profesor
+    public partial class Aula
     {
-        public Profesor()
+        public Aula()
         {
             this.Curso = new HashSet<Curso>();
         }
     
-        public int idProfesor { get; set; }
+        public int idAula { get; set; }
         public string nombre { get; set; }
-        public Nullable<int> experiencia { get; set; }
+        public int capacidad { get; set; }
     
         public virtual ICollection<Curso> Curso { get; set; }
     }

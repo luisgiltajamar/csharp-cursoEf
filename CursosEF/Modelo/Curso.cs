@@ -14,6 +14,11 @@ namespace CursosEF.Modelo
     
     public partial class Curso
     {
+        public Curso()
+        {
+            this.Aula = new HashSet<Aula>();
+        }
+    
         public int idCurso { get; set; }
         public string nombre { get; set; }
         public Nullable<int> profesor { get; set; }
@@ -21,5 +26,6 @@ namespace CursosEF.Modelo
         public int duracion { get; set; }
     
         public virtual Profesor Profesor1 { get; set; }
+        public virtual ICollection<Aula> Aula { get; set; }
     }
 }

@@ -8,6 +8,8 @@
         <EntityTypeShape EntityType="ModeloDatos.Curso" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="ModeloDatos.Profesor" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
         <AssociationConnector Association="ModeloDatos.FK_Curso_Profesor" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ModeloDatos.Aula" Width="1.5" PointX="0.75" PointY="4.875" />
+        <AssociationConnector Association="ModeloDatos.Curso_Aula" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

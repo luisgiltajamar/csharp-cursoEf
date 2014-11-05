@@ -4,7 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ModeloDatos.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ModeloDatos.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Aula">
+          <Key>
+            <PropertyRef Name="idAula" />
+          </Key>
+          <Property Name="idAula" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="capacidad" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Curso">
           <Key>
             <PropertyRef Name="idCurso" />
@@ -15,6 +23,14 @@
           <Property Name="inicio" Type="date" Nullable="false" />
           <Property Name="duracion" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Curso_Aula">
+          <Key>
+            <PropertyRef Name="idCurso" />
+            <PropertyRef Name="idAula" />
+          </Key>
+          <Property Name="idCurso" Type="int" Nullable="false" />
+          <Property Name="idAula" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Profesor">
           <Key>
             <PropertyRef Name="idProfesor" />
@@ -23,6 +39,30 @@
           <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="experiencia" Type="int" />
         </EntityType>
+        <Association Name="FK_Curso_Aula_Aula">
+          <End Role="Aula" Type="Self.Aula" Multiplicity="1" />
+          <End Role="Curso_Aula" Type="Self.Curso_Aula" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Aula">
+              <PropertyRef Name="idAula" />
+            </Principal>
+            <Dependent Role="Curso_Aula">
+              <PropertyRef Name="idAula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Curso_Aula_Curso">
+          <End Role="Curso" Type="Self.Curso" Multiplicity="1" />
+          <End Role="Curso_Aula" Type="Self.Curso_Aula" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Curso">
+              <PropertyRef Name="idCurso" />
+            </Principal>
+            <Dependent Role="Curso_Aula">
+              <PropertyRef Name="idCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Curso_Profesor">
           <End Role="Profesor" Type="Self.Profesor" Multiplicity="0..1" />
           <End Role="Curso" Type="Self.Curso" Multiplicity="*" />
@@ -36,15 +76,24 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="ModeloDatosStoreContainer">
+          <EntitySet Name="Aula" EntityType="Self.Aula" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Curso" EntityType="Self.Curso" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Curso_Aula" EntityType="Self.Curso_Aula" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Profesor" EntityType="Self.Profesor" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Curso_Aula_Aula" Association="Self.FK_Curso_Aula_Aula">
+            <End Role="Aula" EntitySet="Aula" />
+            <End Role="Curso_Aula" EntitySet="Curso_Aula" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Curso_Aula_Curso" Association="Self.FK_Curso_Aula_Curso">
+            <End Role="Curso" EntitySet="Curso" />
+            <End Role="Curso_Aula" EntitySet="Curso_Aula" />
+          </AssociationSet>
           <AssociationSet Name="FK_Curso_Profesor" Association="Self.FK_Curso_Profesor">
             <End Role="Profesor" EntitySet="Profesor" />
             <End Role="Curso" EntitySet="Curso" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ModeloDatos" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -58,6 +107,7 @@
           <Property Name="inicio" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="duracion" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Profesor1" Relationship="Self.FK_Curso_Profesor" FromRole="Curso" ToRole="Profesor" />
+          <NavigationProperty Name="Aula" Relationship="ModeloDatos.Curso_Aula" FromRole="Curso" ToRole="Aula" />
         </EntityType>
         <EntityType Name="Profesor">
           <Key>
@@ -87,7 +137,25 @@
             <End Role="Profesor" EntitySet="Profesor" />
             <End Role="Curso" EntitySet="Curso" />
           </AssociationSet>
+          <EntitySet Name="Aula" EntityType="ModeloDatos.Aula" />
+          <AssociationSet Name="Curso_Aula" Association="ModeloDatos.Curso_Aula">
+            <End Role="Aula" EntitySet="Aula" />
+            <End Role="Curso" EntitySet="Curso" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Aula">
+          <Key>
+            <PropertyRef Name="idAula" />
+          </Key>
+          <Property Name="idAula" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="capacidad" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Curso" Relationship="ModeloDatos.Curso_Aula" FromRole="Aula" ToRole="Curso" />
+        </EntityType>
+        <Association Name="Curso_Aula">
+          <End Type="ModeloDatos.Aula" Role="Aula" Multiplicity="*" />
+          <End Type="ModeloDatos.Curso" Role="Curso" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -114,6 +182,23 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Aula">
+            <EntityTypeMapping TypeName="ModeloDatos.Aula">
+              <MappingFragment StoreEntitySet="Aula">
+                <ScalarProperty Name="capacidad" ColumnName="capacidad" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="idAula" ColumnName="idAula" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Curso_Aula" TypeName="ModeloDatos.Curso_Aula" StoreEntitySet="Curso_Aula">
+            <EndProperty Name="Curso">
+              <ScalarProperty Name="idCurso" ColumnName="idCurso" />
+            </EndProperty>
+            <EndProperty Name="Aula">
+              <ScalarProperty Name="idAula" ColumnName="idAula" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

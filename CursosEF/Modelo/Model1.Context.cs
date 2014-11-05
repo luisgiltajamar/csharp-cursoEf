@@ -27,5 +27,6 @@ namespace CursosEF.Modelo
     
         public virtual DbSet<Curso> Curso { get; set; }
         public virtual DbSet<Profesor> Profesor { get; set; }
+        public virtual DbSet<Aula> Aula { get; set; }
     }
 }

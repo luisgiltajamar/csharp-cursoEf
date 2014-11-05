@@ -50,6 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CursoProfe.cs" />
+    <Compile Include="Modelo\Aula.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Modelo\Curso.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
